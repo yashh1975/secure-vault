@@ -1,103 +1,133 @@
-# SecureVault - Secure File Storage System
+# SecureVault – Military-Grade Encrypted Cloud Storage
 
-A full-stack, production-ready web application for securely storing, encrypting, and sharing files.
+🔗 **Live Application**
+👉 [https://secure-vault-umber.vercel.app/](https://secure-vault-umber.vercel.app/)
 
-## Features
+---
 
-- **End-to-End File Encryption:** Files are encrypted using AES-256-CBC in memory before being uploaded to S3.
-- **Secure File Sharing:** Generate time-limited (30 min) secure links for your encrypted files.
-- **Authentication:** JWT-based authentication with access and refresh tokens. Passwords are hashed with bcrypt.
-- **S3 Integration:** Files are stored securely in AWS S3 buckets.
-- **Rate Limiting & Security:** Built with `helmet`, `express-rate-limit`, and robust input validation.
-- **Audit Logging:** Every file access, upload, download, and share action is logged for tracking.
+## 🎯 Project Overview
 
-## Tech Stack
+**SecureVault** is a premium, visually stunning web application designed for maximum-security file storage and sharing. Unlike traditional cloud storage, SecureVault implements **Zero-Knowledge Encryption**—every file is encrypted using **AES-256-CBC** on the backend before it ever touches the cloud. The app features a high-end **Glassmorphism UI** with a dynamic mesh-gradient background, making it as beautiful as it is secure.
 
-- **Frontend:** React (Vite), TailwindCSS, Zustand, React Router, Axios
-- **Backend:** Node.js, Express.js
-- **Database:** MongoDB (Mongoose)
-- **Storage:** AWS S3
-- **Encryption:** Node.js Crypto module (AES-256-CBC)
+---
 
-## Prerequisites
+## ✨ Features
 
-- Node.js (v18+)
-- MongoDB connection string (e.g., MongoDB Atlas)
-- AWS Account with an S3 Bucket set up
-- S3 Bucket requires a private policy (no public access)
+*   **🔒 Military-Grade Encryption** – Uses AES-256-CBC to encrypt files. The raw data is never stored, ensuring total privacy.
+*   **☁️ Hybrid Cloud Infrastructure** – Combines **MongoDB Atlas** for metadata tracking and **AWS S3** for infinitely scalable binary storage.
+*   **🔗 Secure Sharing** – Generate time-limited, self-expiring links for sharing files with anyone. Decryption happens on-the-fly during download.
+*   **🗑️ Trash & Recovery** – Integrated soft-deletion system. Accidentally deleted a file? Restore it from the Trash Bin or purge it forever.
+*   **📂 Bulk Operations** – Select multiple files to restore, delete, or manage efficiently.
+*   **🎨 Premium UI** – Custom glass-morphism aesthetic with dark-mode optimized colors, smooth-scroll navigation, and micro-animations.
+*   **📱 Fully Responsive** – A seamless experience across desktop, tablet, and mobile devices.
 
-## Setup Instructions
+---
 
-### 1. Clone the repository
+## 🛠️ Tech Stack
 
-### 2. Backend Setup
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend** | React 18, Vite, Tailwind CSS, Zustand, Framer Motion, Lucide-React |
+| **Backend** | Node.js, Express, JWT Authentication, Crypto (AES-256), Multer |
+| **Database** | MongoDB Atlas (Cloud Cluster), Mongoose |
+| **Cloud Storage** | Amazon Web Services (AWS) S3 |
+| **Hosting** | Vercel (Frontend), Render (Backend API) |
 
-```bash
-cd backend
-npm install
+---
+
+## 📁 Repository Structure
+
+```text
+secure-file-storage/
+├── backend/                # Node.js API
+│   ├── config/             # Database & AWS configurations
+│   ├── controllers/        # Business logic (Auth, Files, Sharing)
+│   ├── middleware/         # Security & Audit logging
+│   ├── models/             # Mongoose schemas (User, File, SharedLink)
+│   ├── routes/             # API Endpoints
+│   ├── utils/              # Encryption & S3 utility functions
+│   └── server.js           # Entry point
+├── frontend/               # React Frontend (Vite)
+│   ├── src/
+│   │   ├── components/     # UI Components (Modals, Navbar, etc.)
+│   │   ├── pages/          # Full pages (Dashboard, Login, Upload)
+│   │   ├── store/          # Zustand state management
+│   │   └── utils/          # API wrapper and helpers
+│   ├── index.html
+│   └── tailwind.config.js
+└── README.md               # Documentation
 ```
 
-Create a `.env` file in the `backend` directory based on `.env.example`:
+---
 
-```env
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-JWT_REFRESH_SECRET=your_jwt_refresh_secret_key
-AWS_ACCESS_KEY_ID=your_aws_access_key
-AWS_SECRET_ACCESS_KEY=your_aws_secret_key
-AWS_REGION=your_aws_region
-AWS_BUCKET_NAME=your_s3_bucket_name
-ENCRYPTION_KEY=your_32_byte_hex_string_key
-CLIENT_URL=http://localhost:5173
-```
+## 🚀 Getting Started
 
-Run the backend:
-```bash
-node server.js
-```
+### Prerequisites
+*   **Node.js** (>= 18) and **npm**
+*   **MongoDB Atlas** account
+*   **AWS IAM User** with S3 permissions
 
-### 3. Frontend Setup
+### Installation
 
-```bash
-cd frontend
-npm install
-```
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/yashh1975/secure-vault.git
+   cd secure-file-storage
+   ```
 
-Create a `.env` file in the `frontend` directory:
+2. **Backend Setup**
+   ```bash
+   cd backend
+   npm install
+   # Create a .env file based on .env.example
+   npm start
+   ```
 
-```env
-VITE_API_URL=http://localhost:5000/api
-```
+3. **Frontend Setup**
+   ```bash
+   cd ../frontend
+   npm install
+   # Create a .env file with VITE_API_URL=http://localhost:5000/api
+   npm run dev
+   ```
 
-Run the frontend:
-```bash
-npm run dev
-```
+---
 
-## API Documentation
+## 📦 Deployment
 
-### Auth
-- `POST /api/auth/signup` - Register a new user
-- `POST /api/auth/login` - Authenticate a user
-- `POST /api/auth/refresh` - Get a new access token
+This application is designed for a split-cloud deployment:
+*   **Backend:** Hosted on **Render** (as a Web Service). Root directory: `backend`.
+*   **Frontend:** Hosted on **Vercel**. Root directory: `frontend`.
+*   **Environment Variables:** Ensure all keys (`AWS_KEYS`, `MONGO_URI`, `ENCRYPTION_KEY`) are mirrored in the Render/Vercel dashboard settings.
 
-### Files
-- `POST /api/files/upload` - Upload a file (multipart/form-data)
-- `GET /api/files` - List all files for the authenticated user
-- `GET /api/files/:id/download` - Download a decrypted file
-- `DELETE /api/files/:id` - Delete a file
+---
 
-### Share
-- `POST /api/files/:id/share` - Generate a secure share link
-- `GET /api/share/:token` - Access a shared file
+## 🎨 Design Philosophy
 
-### Admin
-- `GET /api/admin/files` - List all files across all users (Requires 'admin' role)
+SecureVault follows a **"Deep Tech" aesthetic**:
+*   **Dark-Mode First**: Deep indigo and violet backgrounds.
+*   **Glass-like cards**: `backdrop-blur` and semi-transparent borders for a premium feel.
+*   **Subtle micro-animations**: Scale-up and fade-in effects using Framer Motion.
+*   **Branding**: Custom SVG logo design integrated throughout the interface.
 
-## Deployment Notes
+---
 
-- **Frontend:** Can be deployed easily on Vercel. Ensure you set the `VITE_API_URL` environment variable to your production backend URL.
-- **Backend:** Can be deployed on Render, Railway, or any Node.js hosting platform. Ensure all environment variables from `.env` are configured in the deployment platform.
-- **Database:** Use MongoDB Atlas for a scalable, cloud-hosted database.
-- **Storage:** Use AWS S3. Ensure the IAM user has `s3:PutObject`, `s3:GetObject`, and `s3:DeleteObject` permissions for the specific bucket.
+## 📜 License
+
+This project is open-source under the **MIT License**. Feel free to fork, modify, and deploy it for personal or commercial use.
+
+---
+
+## 🙏 Acknowledgements
+
+*   **AWS S3** – For providing industry-standard reliable storage.
+*   **Lucide-React** – For the beautiful and consistent icon system.
+*   **Render & Vercel** – For making modern deployment effortless.
+
+---
+
+## Author
+
+**Yash**
+
+*Happy coding, and enjoy your own private, encrypted vault!*
